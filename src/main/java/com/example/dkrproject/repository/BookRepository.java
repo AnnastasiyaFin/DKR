@@ -19,7 +19,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findRandom();
 
     @Query(value = "select b.* FROM Book b INNER JOIN book_author ba ON b.id = ba.book_id " +
-            "INNER JOIN Author a ON a.id = ba.author_id WHERE a.name = :author",
+            "INNER JOIN Author a ON a.id = ba.author_id WHERE a.name LIKE %:author%",
             nativeQuery = true)
     List<Book> getBooksByAuthor(String author);
 

@@ -46,8 +46,7 @@ public class DepartmentService {
     }
 
     public Department updateDepartment(long id, DepartmentDTO departmentRequest) throws ResourceNotFoundException {
-        Department departmentUpdated = departmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + id));
+        Department departmentUpdated = findById(id);
         departmentUpdated.setName(departmentRequest.getName());
         return departmentRepository.save(departmentUpdated);
     }

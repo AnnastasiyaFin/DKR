@@ -1,5 +1,6 @@
 package com.example.dkrproject.controller;
 
+import com.example.dkrproject.dto.UserBooksDTO;
 import com.example.dkrproject.dto.UserDTO;
 import com.example.dkrproject.exception.ResourceNotFoundException;
 import com.example.dkrproject.model.User;
@@ -71,6 +72,12 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getUsersByDepartment(@RequestParam String department) {
         List<UserDTO> users = userService.getUsersByDepartment(department);
         return ResponseEntity.ok().body(users);
+    }
+
+    @GetMapping("/usersBooks")
+    public ResponseEntity<List<UserBooksDTO>> getUsersBooks(@RequestParam String userName) {
+        List<UserBooksDTO> usersBooks = userService.getUsersBooks(userName);
+        return ResponseEntity.ok().body(usersBooks);
     }
 
     @DeleteMapping("/delete/{name}")

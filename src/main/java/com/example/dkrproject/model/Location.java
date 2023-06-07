@@ -20,12 +20,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Location should not be null")
     private String name;
-
-//    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
-//    @JsonBackReference
-//    private List<User> users;
 
     public Location (String name) {
         this.name = name;

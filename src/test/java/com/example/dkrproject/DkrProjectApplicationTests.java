@@ -159,6 +159,17 @@ class DkrProjectApplicationTests {
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
+    @Test
+    void getUserBooks() {
+        final String user = "Агата Андреевa";
+
+        ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/user/usersBooks?userName={user}", String.class, user);
+
+        assertNotNull(response.getBody());
+
+        System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+    }
+
 
     @Test
     void testOrders() throws ResourceNotFoundException {
@@ -199,8 +210,7 @@ class DkrProjectApplicationTests {
         final long bookId = bookService.getRandom();
         final long userId = userService.getRandom();
 
-        OrderDTO order = OrderDTO.builder().bookId(bookId).userId(userId).dateToReturn("2023-08-10").build();
-        return order;
+        return OrderDTO.builder().bookId(bookId).userId(userId).dateToReturn("2023-08-10").build();
     }
 
 

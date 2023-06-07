@@ -1,5 +1,6 @@
 package com.example.dkrproject.service;
 
+import com.example.dkrproject.dto.UserBooksDTO;
 import com.example.dkrproject.exception.ResourceNotFoundException;
 import com.example.dkrproject.model.Department;
 import com.example.dkrproject.model.User;
@@ -15,9 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -37,17 +37,13 @@ public class UserService {
     public List<UserDTO> getAllUsers(int pageNumber, int pageSize) {
         Pageable pages = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, "name", "birthDate"));
         List<User> userList = userRepository.findAll(pages).getContent();
-        List<UserDTO> responseList = new ArrayList<>();
-        userList.forEach(user ->
-                responseList.add(userTransformer.transformDTOToUser(user))
-        );
-        return responseList;
+        return userList.stream().map(userTransformer::transformUserToDTO).toList();
     }
 
     public UserDTO qetUserResponseById(long id) throws ResourceNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
-        return userTransformer.transformDTOToUser(user);
+        return userTransformer.transformUserToDTO(user);
     }
 
     public User qetUserById(long id) throws ResourceNotFoundException {
@@ -60,7 +56,7 @@ public class UserService {
     }
 
     public UserDTO saveUser(UserDTO userRequest) throws ResourceNotFoundException {
-        User user = userTransformer.transformDTOToUser(userRequest);
+        User user = userTransformer.transformUserToDTO(userRequest);
         Location location = locationService.getLocation(userRequest.getLocation());
         if (location == null) {
             location = locationService.save(new Location(userRequest.getLocation()));
@@ -76,7 +72,7 @@ public class UserService {
         }
 
         user = userRepository.save(user);
-        return userTransformer.transformDTOToUser(user);
+        return userTransformer.transformUserToDTO(user);
     }
 
     public UserDTO updateUser(long id, UserDTO userRequest) throws ResourceNotFoundException {
@@ -100,25 +96,17 @@ public class UserService {
             userUpdated.setDepartment(department);
         }
 
-        return userTransformer.transformDTOToUser(userRepository.save(userUpdated));
+        return userTransformer.transformUserToDTO(userRepository.save(userUpdated));
     }
 
     public List<UserDTO> getUsersByName(String name) {
         List<User> list = userRepository.findByName(name);
-        List<UserDTO> responseList = new ArrayList<>();
-        list.forEach(user -> {
-            responseList.add(userTransformer.transformDTOToUser(user));
-        });
-        return responseList;
+        return list.stream().map(userTransformer::transformUserToDTO).toList();
     }
 
     public List<UserDTO> getUsersByNameContaining(String name) {
         List<User> list = userRepository.findByNameContaining(name);
-        List<UserDTO> responseList = new ArrayList<>();
-        list.forEach(user -> {
-            responseList.add(userTransformer.transformDTOToUser(user));
-        });
-        return responseList;
+        return list.stream().map(userTransformer::transformUserToDTO).toList();
     }
 
     public Integer deleteUserByName(String name) {
@@ -127,11 +115,7 @@ public class UserService {
 
     public List<UserDTO> getUsersByDepartment(String department) {
         List<User> list = userRepository.getUsersByDepartment(department);
-        List<UserDTO> responseList = new ArrayList<>();
-        list.forEach(user -> {
-            responseList.add(userTransformer.transformDTOToUser(user));
-        });
-        return responseList;
+        return list.stream().map(userTransformer::transformUserToDTO).toList();
     }
 
 //    public UserDTO assignDepToUser(Long userId, Long depId) throws ResourceNotFoundException {
@@ -149,5 +133,10 @@ public class UserService {
         User user = userRepository.findRandom()
                 .orElseThrow(() -> new ResourceNotFoundException("No user found"));
         return user.getId();
+    }
+
+    public List<UserBooksDTO> getUsersBooks(String userName) {
+        List<User> list = userRepository.findByName(userName);
+        return list.stream().map(userTransformer::transformUserToUserBooksDTO).toList();
     }
 }

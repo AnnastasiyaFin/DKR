@@ -1,20 +1,17 @@
 package com.example.dkrproject.service;
 
 import com.example.dkrproject.dto.BookDTO;
-import com.example.dkrproject.dto.UserDTO;
 import com.example.dkrproject.exception.ResourceNotFoundException;
 import com.example.dkrproject.model.Author;
 import com.example.dkrproject.model.Book;
 import com.example.dkrproject.model.Category;
 import com.example.dkrproject.model.Publisher;
-import com.example.dkrproject.model.User;
 import com.example.dkrproject.repository.BookRepository;
 import com.example.dkrproject.repository.CategoryRepository;
 import com.example.dkrproject.transformer.BookTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,11 +36,7 @@ public class BookService {
 
     public List<BookDTO> findAllBooks() {
         List<Book> books = bookRepository.findAll();
-        List<BookDTO> responseList = new ArrayList<>();
-        books.forEach(book ->
-                responseList.add(bookTransformer.transformBookToResp(book))
-        );
-        return responseList;
+        return books.stream().map(bookTransformer::transformBookToResp).toList();
     }
 
     public Book findById(Long bookId) throws ResourceNotFoundException {
@@ -111,28 +104,16 @@ public class BookService {
 
     public List<BookDTO> getBooksByAuthor(String author) {
         List<Book> list = bookRepository.getBooksByAuthor(author);
-        List<BookDTO> responseList = new ArrayList<>();
-        list.forEach(book -> {
-            responseList.add(bookTransformer.transformBookToResp(book));
-        });
-        return responseList;
+        return list.stream().map(bookTransformer::transformBookToResp).toList();
     }
 
     public List<BookDTO> getBooksByCategory(String category) {
         List<Book> list = bookRepository.findByCategory(category);
-        List<BookDTO> responseList = new ArrayList<>();
-        list.forEach(book -> {
-            responseList.add(bookTransformer.transformBookToResp(book));
-        });
-        return responseList;
+        return list.stream().map(bookTransformer::transformBookToResp).toList();
     }
 
     public List<BookDTO> getBooksByUser(String user) {
         List<Book> list = bookRepository.findByUser(user);
-        List<BookDTO> responseList = new ArrayList<>();
-        list.forEach(book -> {
-            responseList.add(bookTransformer.transformBookToResp(book));
-        });
-        return responseList;
+        return list.stream().map(bookTransformer::transformBookToResp).toList();
     }
 }

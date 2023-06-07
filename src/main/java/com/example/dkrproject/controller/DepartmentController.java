@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/department")
-@Tag(name="Отделы", description="Получение данных об отделах")
+@Tag(name="Факультеты", description="Получение данных о факультетах")
 public class DepartmentController {
 
     @Autowired

@@ -1,9 +1,7 @@
 package com.example.dkrproject.service;
 
-import com.example.dkrproject.dto.BookDTO;
 import com.example.dkrproject.dto.PublisherDTO;
 import com.example.dkrproject.exception.ResourceNotFoundException;
-import com.example.dkrproject.model.Book;
 import com.example.dkrproject.model.Location;
 import com.example.dkrproject.model.Publisher;
 import com.example.dkrproject.repository.PublisherRepository;
@@ -11,7 +9,6 @@ import com.example.dkrproject.transformer.PublisherTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,11 +25,7 @@ public class PublisherService {
 
     public List<PublisherDTO> getPublisherList() {
         List<Publisher> publishers = publisherRepository.findAll();
-        List<PublisherDTO> responseList = new ArrayList<>();
-        publishers.forEach(publisher ->
-                responseList.add(publisherTransformer.transformPublisherToResp(publisher))
-        );
-        return responseList;
+        return publishers.stream().map(publisherTransformer::transformPublisherToResp).toList();
     }
 
     public Publisher findPublisherByName(String name) {
@@ -68,8 +61,7 @@ public class PublisherService {
     }
 
     public PublisherDTO updatePublisher(long id, PublisherDTO departmentRequest) throws ResourceNotFoundException {
-        Publisher departmentUpdated = publisherRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + id));
+        Publisher departmentUpdated = findById(id);
         departmentUpdated.setName(departmentRequest.getName());
         return publisherTransformer.transformPublisherWithoutBooks(publisherRepository.save(departmentUpdated));
     }

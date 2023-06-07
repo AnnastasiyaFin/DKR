@@ -29,11 +29,7 @@ public class OrderService {
 
     public List<OrderDTO> getOrders() {
         List<Order> orderList = orderRepository.findAll();
-        List<OrderDTO> responseList = new ArrayList<>();
-        orderList.forEach(user ->
-                responseList.add(orderTransformer.transformOrderToDTO(user))
-        );
-        return responseList;
+        return orderList.stream().map(orderTransformer::transformOrderToDTO).toList();
     }
 
     public OrderDTO save(OrderDTO order) throws ResourceNotFoundException {
