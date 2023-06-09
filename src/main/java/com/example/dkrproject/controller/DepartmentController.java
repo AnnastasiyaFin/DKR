@@ -5,6 +5,7 @@ import com.example.dkrproject.model.Department;
 import com.example.dkrproject.dto.DepartmentDTO;
 import com.example.dkrproject.service.DepartmentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,12 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createDepartment(@RequestBody DepartmentDTO departmentRequest) {
+    public ResponseEntity<String> createDepartment(@Valid @RequestBody DepartmentDTO departmentRequest) {
         return new ResponseEntity<>(depService.saveDepartment(departmentRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Department> updateDepartment(@PathVariable("id") long id, @RequestBody DepartmentDTO departmentRequest) throws ResourceNotFoundException {
+    public ResponseEntity<Department> updateDepartment(@PathVariable("id") long id, @Valid @RequestBody DepartmentDTO departmentRequest) throws ResourceNotFoundException {
         Department depUpdated = depService.updateDepartment(id, departmentRequest);
         return ResponseEntity.ok().body(depUpdated);
     }

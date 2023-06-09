@@ -1,5 +1,6 @@
 package com.example.dkrproject.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +16,8 @@ public class OrderDTO {
     @NotEmpty(message = "Date to return should not be null")
     private String dateToReturn;
     private Boolean isReturned;
-    @NotEmpty(message = "UserID should not be null")
-    private Long userId;
-    @NotEmpty(message = "BookId should not be null")
+    @Min(value = 1, message = "Enter readerCardID")
+    private Long readerCardId;
+    @Min(value = 1,message = "Enter bookId")
     private Long bookId;
 }

@@ -28,7 +28,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByCategory(String category);
 
     @Query(value = "select b.* FROM Book b INNER JOIN Orders o on b.id = o.book_id " +
-            "INNER JOIN Users u ON u.id = o.user_id WHERE u.name = :user",
+            "INNER JOIN Reader_Card rc ON rc.id = o.reader_card_id " +
+            "INNER JOIN Users u ON u.reader_card_id = rc.id WHERE u.name = :user",
             nativeQuery = true)
     List<Book> findByUser(String user);
 }

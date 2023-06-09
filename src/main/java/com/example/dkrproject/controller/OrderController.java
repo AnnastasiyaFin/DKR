@@ -5,6 +5,7 @@ import com.example.dkrproject.exception.ResourceNotFoundException;
 import com.example.dkrproject.model.Order;
 import com.example.dkrproject.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> addOrder(@RequestBody OrderDTO order) throws ResourceNotFoundException {
+    public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO order) throws ResourceNotFoundException {
         return new ResponseEntity<>(orderService.save(order), HttpStatus.CREATED);
     }
 

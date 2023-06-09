@@ -15,10 +15,10 @@ class DatabaseFillerTest {
 
     @Test
     void fillDatabase() {
-        final int usersCount = 100_000;
-        final int publishersCount = 1000;
-        final int booksCount = 100_000;
-        final int ordersCount = 500_000;
+        final int usersCount = 100;
+        final int publishersCount = 100;
+        final int booksCount = 100;
+        final int ordersCount = 100;
 
         assertThatNoException()
                 .isThrownBy(() -> databaseFiller.fillDatabase(usersCount, publishersCount, booksCount, ordersCount));

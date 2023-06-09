@@ -30,18 +30,18 @@ public class UserDTO {
     @Pattern(regexp = "^\\+375\\d{9}$", message = "Enter correct phone number (+375XXXXXXX)")
     private String phone;
     private String department;
+    private Long readerCardId;
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("id: ").append(id)
-                .append("\nname: ").append(name)
-                .append("\nbirtDate: ").append(birthDate)
-                .append("\nemail: ").append(email)
-                .append("\nphone: ").append(phone)
-                .append("\nlocation: ").append(location)
-                .append("\ndepartments: ").append(department);
-        return sb.toString();
+        return "id: " + id +
+                "\nname: " + name +
+                "\nbirtDate: " + birthDate +
+                "\nemail: " + email +
+                "\nphone: " + phone +
+                "\nlocation: " + location +
+                "\ndepartments: " + department +
+                "\nreader card id: " + readerCardId;
     }
 
 }

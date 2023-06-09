@@ -97,11 +97,11 @@ public class DatabaseFiller {
         int createdOrders = 0;
         while (createdOrders < ordersAmount) {
             final long bookId;
-            final long userId;
+            final long readerCardId;
 
             try {
                 bookId = bookService.getRandom();
-                userId = userService.getRandom();
+                readerCardId = userService.getRandom();
             } catch (ResourceNotFoundException e) {
                 log.debug(e.getMessage());
                 continue;
@@ -110,7 +110,7 @@ public class DatabaseFiller {
             try {
                 OrderDTO order = OrderDTO.builder()
                         .bookId(bookId)
-                        .userId(userId)
+                        .readerCardId(readerCardId)
                         .orderDate(getDateStart())
                         .dateToReturn(getDateEnd())
                         .isReturned(RandomUtils.nextBoolean())

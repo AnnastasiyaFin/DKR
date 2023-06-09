@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +18,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private UserService userService;
+    private ReaderCardService readerCardService;
 
     @Autowired
     private BookService bookService;
@@ -37,7 +36,7 @@ public class OrderService {
                 .dateToReturn(LocalDate.parse(order.getDateToReturn()))
                 .isReturned(false)
                 .book(bookService.findById(order.getBookId()))
-                .user(userService.qetUserById(order.getUserId()))
+                .readerCard(readerCardService.getCardById(order.getReaderCardId()))
                 .build();
         newOrder = orderRepository.save(newOrder);
         bookService.updateAmount(order.getBookId(), "remove", 1);
@@ -81,7 +80,7 @@ public class OrderService {
                 .dateToReturn(LocalDate.parse(order.getDateToReturn()))
                 .isReturned(order.getIsReturned())
                 .book(bookService.findById(order.getBookId()))
-                .user(userService.qetUserById(order.getUserId()))
+                .readerCard(readerCardService.getCardById(order.getReaderCardId()))
                 .build();
         orderRepository.save(newOrder);
     }

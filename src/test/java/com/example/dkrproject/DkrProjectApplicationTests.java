@@ -41,28 +41,20 @@ class DkrProjectApplicationTests {
 
     @Autowired
     AuthorService authorService;
-
     @Autowired
     BookService bookService;
-
     @Autowired
     DepartmentService departmentService;
-
     @Autowired
     OrderService orderService;
-
     @Autowired
     PublisherService publisherService;
-
     @Autowired
     UserService userService;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     UserController userController;
-
     @Autowired
     UserTransformer userTransformer;
 
@@ -96,16 +88,11 @@ class DkrProjectApplicationTests {
     void getBookList() {
         final StopWatch sw = new StopWatch("Execution time");
         sw.start();
-
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
         ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/api/v1/book", HttpMethod.GET, entity, String.class);
-
         assertNotNull(response.getBody());
-
         log.info(gson.toJson(JsonParser.parseString(response.getBody())));
-
         sw.stop();
         System.out.println(sw.getTotalTimeMillis());
     }
@@ -115,13 +102,9 @@ class DkrProjectApplicationTests {
         final StopWatch sw = new StopWatch("Execution time");
         sw.start();
         final long bookId = 2;
-
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/{id}", String.class, bookId);
-
         assertNotNull(response.getBody());
-
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
-
         sw.stop();
         System.out.println(sw.getTotalTimeMillis());
     }
@@ -129,44 +112,40 @@ class DkrProjectApplicationTests {
     @Test
     void getBooksByAuthor() {
         final String authorName = "Полина Белова";
-
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/filterByAuthor?author={author}", String.class, authorName);
-
         assertNotNull(response.getBody());
-
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
     @Test
     void getBooksByCategory() {
         final String category = "рассказ";
-
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/filterByCategory?category={category}", String.class, category);
-
         assertNotNull(response.getBody());
-
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
     @Test
     void getBooksByUser() {
-        final String user = "Агата Андреевa";
-
+        final String user = "Алексей Лыткин";
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/orderedBooksByUser?user={user}", String.class, user);
-
         assertNotNull(response.getBody());
-
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
     @Test
     void getUserBooks() {
-        final String user = "Агата Андреевa";
-
+        final String user = "Алексей Лыткин";
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/user/usersBooks?userName={user}", String.class, user);
-
         assertNotNull(response.getBody());
+        System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+    }
 
+    @Test
+    void getUserBooksByReaderCard() {
+        final Long readerCard = 72L;
+        ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/user/usersBooksByReaderCard?readerCard={readerCard}", String.class, readerCard);
+        assertNotNull(response.getBody());
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
@@ -208,9 +187,8 @@ class DkrProjectApplicationTests {
 
     private OrderDTO createNewOrder() throws ResourceNotFoundException {
         final long bookId = bookService.getRandom();
-        final long userId = userService.getRandom();
-
-        return OrderDTO.builder().bookId(bookId).userId(userId).dateToReturn("2023-08-10").build();
+        final long readerCardId = userService.getRandom();
+        return OrderDTO.builder().bookId(bookId).readerCardId(readerCardId).dateToReturn("2023-08-10").build();
     }
 
 

@@ -32,12 +32,12 @@ public class User {
 
     private String phone;
 
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private ReaderCard readerCard;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Order> orders;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")

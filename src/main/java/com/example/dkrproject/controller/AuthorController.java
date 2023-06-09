@@ -5,6 +5,7 @@ import com.example.dkrproject.model.Author;
 import com.example.dkrproject.dto.AuthorDTO;
 import com.example.dkrproject.service.AuthorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +27,13 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Author> addAuthor(@RequestBody AuthorDTO authorRequest) {
+    public ResponseEntity<Author> addAuthor(@Valid @RequestBody AuthorDTO authorRequest) {
         return new ResponseEntity<>(authorService.save(authorRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id,
-                                               @RequestBody AuthorDTO authorRequest) throws ResourceNotFoundException {
+                                               @Valid @RequestBody AuthorDTO authorRequest) throws ResourceNotFoundException {
         Author authorUpdated = authorService.updateAuthor(id, authorRequest);
         return ResponseEntity.ok().body(authorUpdated);
     }

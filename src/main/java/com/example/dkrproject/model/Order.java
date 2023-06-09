@@ -41,8 +41,8 @@ public class Order {
     private Boolean isReturned;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "reader_card_id")
+    private ReaderCard readerCard;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")

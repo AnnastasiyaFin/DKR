@@ -5,6 +5,7 @@ import com.example.dkrproject.exception.ResourceNotFoundException;
 import com.example.dkrproject.model.Publisher;
 import com.example.dkrproject.service.PublisherService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,12 @@ public class PublisherController {
     }
 
     @PostMapping
-    public ResponseEntity<PublisherDTO> addPublisher(@RequestBody PublisherDTO publisher) {
+    public ResponseEntity<PublisherDTO> addPublisher(@Valid @RequestBody PublisherDTO publisher) {
         return new ResponseEntity<>(publisherService.save(publisher), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PublisherDTO> updatePublisher(@PathVariable("id") long id, @RequestBody PublisherDTO publisher) throws ResourceNotFoundException {
+    public ResponseEntity<PublisherDTO> updatePublisher(@PathVariable("id") long id, @Valid @RequestBody PublisherDTO publisher) throws ResourceNotFoundException {
         PublisherDTO publisherUpd = publisherService.updatePublisher(id, publisher);
         return ResponseEntity.ok().body(publisherUpd);
     }

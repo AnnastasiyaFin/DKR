@@ -27,6 +27,7 @@ public class UserTransformer {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .location(user.getLocation().getName())
+                .readerCardId(user.getReaderCard().getId())
                 .build();
         if (user.getDepartment() != null) {
             userDTO.setDepartment(user.getDepartment().getName());
@@ -51,13 +52,14 @@ public class UserTransformer {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .location(user.getLocation().getName())
+                .readerCardId(user.getReaderCard().getId())
                 .build();
         if (user.getDepartment() != null) {
             userBooksDTO.setDepartment(user.getDepartment().getName());
         }
-        if (user.getOrders() != null) {
+        if (user.getReaderCard().getOrders() != null) {
             List<BookDTO> books = new ArrayList<>();
-            user.getOrders().forEach(o -> books.add(bookTransformer.transformBookToResp(o.getBook())));
+            user.getReaderCard().getOrders().forEach(o -> books.add(bookTransformer.transformBookToResp(o.getBook())));
             userBooksDTO.setBooks(books);
         }
         return userBooksDTO;

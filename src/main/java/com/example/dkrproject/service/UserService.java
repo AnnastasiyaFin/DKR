@@ -1,12 +1,13 @@
 package com.example.dkrproject.service;
 
 import com.example.dkrproject.dto.UserBooksDTO;
+import com.example.dkrproject.dto.UserDTO;
 import com.example.dkrproject.exception.ResourceNotFoundException;
 import com.example.dkrproject.model.Department;
-import com.example.dkrproject.model.User;
 import com.example.dkrproject.model.Location;
+import com.example.dkrproject.model.ReaderCard;
+import com.example.dkrproject.model.User;
 import com.example.dkrproject.repository.UserRepository;
-import com.example.dkrproject.dto.UserDTO;
 import com.example.dkrproject.transformer.UserTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,6 +29,9 @@ public class UserService {
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private ReaderCardService readerCardService;
 
     @Autowired
     private UserTransformer userTransformer;
@@ -57,6 +59,8 @@ public class UserService {
 
     public UserDTO saveUser(UserDTO userRequest) throws ResourceNotFoundException {
         User user = userTransformer.transformUserToDTO(userRequest);
+        final ReaderCard card = ReaderCard.builder().user(user).build();
+        user.setReaderCard(card);
         Location location = locationService.getLocation(userRequest.getLocation());
         if (location == null) {
             location = locationService.save(new Location(userRequest.getLocation()));
@@ -132,11 +136,16 @@ public class UserService {
     public long getRandom() throws ResourceNotFoundException {
         User user = userRepository.findRandom()
                 .orElseThrow(() -> new ResourceNotFoundException("No user found"));
-        return user.getId();
+        return user.getReaderCard().getId();
     }
 
     public List<UserBooksDTO> getUsersBooks(String userName) {
         List<User> list = userRepository.findByName(userName);
+        return list.stream().map(userTransformer::transformUserToUserBooksDTO).toList();
+    }
+
+    public List<UserBooksDTO> getUsersBooksByReaderCard(Long readerCard) {
+        List<User> list = userRepository.findByReaderCardId(readerCard);
         return list.stream().map(userTransformer::transformUserToUserBooksDTO).toList();
     }
 }

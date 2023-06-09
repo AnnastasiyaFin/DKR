@@ -80,6 +80,12 @@ public class UserController {
         return ResponseEntity.ok().body(usersBooks);
     }
 
+    @GetMapping("/usersBooksByReaderCard")
+    public ResponseEntity<List<UserBooksDTO>> getUsersBooksByReaderCard(@RequestParam Long readerCard) {
+        List<UserBooksDTO> usersBooks = userService.getUsersBooksByReaderCard(readerCard);
+        return ResponseEntity.ok().body(usersBooks);
+    }
+
     @DeleteMapping("/delete/{name}")
     public ResponseEntity<Integer> deleteUserByName(@PathVariable("name") String name) {
         return new ResponseEntity<>(userService.deleteUserByName(name), HttpStatus.OK);

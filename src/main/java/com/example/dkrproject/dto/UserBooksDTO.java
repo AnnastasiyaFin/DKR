@@ -22,5 +22,6 @@ public class UserBooksDTO {
     private String email;
     private String phone;
     private String department;
+    private Long readerCardId;
     private List<BookDTO> books;
 }

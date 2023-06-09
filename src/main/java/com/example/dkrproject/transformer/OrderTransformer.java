@@ -16,7 +16,7 @@ public class OrderTransformer {
                 .dateToReturn(order.getDateToReturn().format(DateTimeFormatter.ISO_DATE))
                 .isReturned(order.getIsReturned())
                 .bookId(order.getBook().getId())
-                .userId(order.getUser().getId())
+                .readerCardId(order.getReaderCard().getId())
                 .build();
     }
 }
