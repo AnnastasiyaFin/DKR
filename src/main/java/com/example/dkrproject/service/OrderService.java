@@ -2,11 +2,13 @@ package com.example.dkrproject.service;
 
 import com.example.dkrproject.dto.OrderDTO;
 import com.example.dkrproject.exception.ResourceNotFoundException;
+import com.example.dkrproject.model.Book;
 import com.example.dkrproject.model.Order;
 import com.example.dkrproject.repository.OrderRepository;
 import com.example.dkrproject.transformer.OrderTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +33,12 @@ public class OrderService {
         return orderList.stream().map(orderTransformer::transformOrderToDTO).toList();
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public OrderDTO save(OrderDTO order) throws ResourceNotFoundException {
+        Book book = bookService.findById(order.getBookId());
+        if (book.getAmountAvailable() == 0) {
+            throw new ResourceNotFoundException("Book '" + book.getTitle() + "' is not available to order. BookId =" + book.getId());
+        }
         Order newOrder = Order.builder().orderDate(LocalDate.now())
                 .dateToReturn(LocalDate.parse(order.getDateToReturn()))
                 .isReturned(false)
@@ -59,6 +66,7 @@ public class OrderService {
         return orderTransformer.transformOrderToDTO(orderRepository.save(orderUpd));
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public void deleteOrder(long id) throws ResourceNotFoundException {
         Order orderUpd = findById(id);
         if (!orderUpd.getIsReturned()) {
@@ -67,6 +75,7 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public OrderDTO cancelOrder(long id) throws ResourceNotFoundException {
         Order orderUpd = findById(id);
         orderUpd.setIsReturned(true);

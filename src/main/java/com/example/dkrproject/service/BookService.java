@@ -11,6 +11,7 @@ import com.example.dkrproject.repository.CategoryRepository;
 import com.example.dkrproject.transformer.BookTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -48,6 +49,7 @@ public class BookService {
         return bookTransformer.transformBookToResp(findById(bookId));
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public BookDTO save(BookDTO bookRequest) throws ResourceNotFoundException {
         Category category = categoryRepository.findByName(bookRequest.getCategory());
         if (category == null) {

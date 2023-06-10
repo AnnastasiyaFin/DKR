@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -57,6 +58,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public UserDTO saveUser(UserDTO userRequest) throws ResourceNotFoundException {
         User user = userTransformer.transformUserToDTO(userRequest);
         final ReaderCard card = ReaderCard.builder().user(user).build();
@@ -70,7 +72,7 @@ public class UserService {
         if (userRequest.getDepartment() != null) {
             Department department = departmentService.findDepartmentByName(userRequest.getDepartment());
             if (department == null) {
-                throw new ResourceNotFoundException("Department not found for this id :" + userRequest.getDepartment());
+                throw new ResourceNotFoundException("Department was not found : " + userRequest.getDepartment());
             }
             user.setDepartment(department);
         }
@@ -79,6 +81,7 @@ public class UserService {
         return userTransformer.transformUserToDTO(user);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public UserDTO updateUser(long id, UserDTO userRequest) throws ResourceNotFoundException {
         User userUpdated = qetUserById(id);
         userUpdated.setName(userRequest.getName());
@@ -95,7 +98,7 @@ public class UserService {
         if (userRequest.getDepartment() != null) {
             Department department = departmentService.findDepartmentByName(userRequest.getDepartment());
             if (department == null) {
-                throw new ResourceNotFoundException("Department not found for this id :" + userRequest.getDepartment());
+                throw new ResourceNotFoundException("Department was not found : " + userRequest.getDepartment());
             }
             userUpdated.setDepartment(department);
         }

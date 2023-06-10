@@ -8,6 +8,7 @@ import com.example.dkrproject.repository.PublisherRepository;
 import com.example.dkrproject.transformer.PublisherTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class PublisherService {
         return publisherRepository.findByName(name).stream().findFirst().orElse(null);
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public PublisherDTO save(PublisherDTO publisherDTO) {
         Location location = locationService.getLocation(publisherDTO.getLocation());
         if (location == null) {
