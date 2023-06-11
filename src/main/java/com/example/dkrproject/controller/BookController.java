@@ -70,6 +70,13 @@ public class BookController {
         return ResponseEntity.ok().body(books);
     }
 
+
+    @GetMapping("/filterByCategoryStreamApi")
+    public ResponseEntity<List<BookDTO>> getBooksByCategoryStreamApi(@RequestParam String category) {
+        List<BookDTO> books = bookService.getBooksByCategoryStreamApi(category);
+        return ResponseEntity.ok().body(books);
+    }
+
     @GetMapping("/orderedBooksByUser")
     public ResponseEntity<List<BookDTO>> getBooksByUser(@RequestParam String user) {
         List<BookDTO> books = bookService.getBooksByUser(user);

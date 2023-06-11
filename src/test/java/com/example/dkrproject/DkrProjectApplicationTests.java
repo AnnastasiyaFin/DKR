@@ -94,7 +94,7 @@ class DkrProjectApplicationTests {
         assertNotNull(response.getBody());
         log.info(gson.toJson(JsonParser.parseString(response.getBody())));
         sw.stop();
-        System.out.println(sw.getTotalTimeMillis());
+        System.out.println(sw.getTotalTimeMillis() + " millis");
     }
 
     @Test
@@ -106,39 +106,68 @@ class DkrProjectApplicationTests {
         assertNotNull(response.getBody());
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
         sw.stop();
-        System.out.println(sw.getTotalTimeMillis());
+        System.out.println("Execution time: "+ sw.getTotalTimeMillis() + " millis");
     }
 
     @Test
     void getBooksByAuthor() {
+        final StopWatch sw = new StopWatch("Execution time");
+        sw.start();
         final String authorName = "Полина Белова";
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/filterByAuthor?author={author}", String.class, authorName);
         assertNotNull(response.getBody());
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+        sw.stop();
+        System.out.println("Execution time: "+ sw.getTotalTimeMillis() + " millis");
     }
 
     @Test
     void getBooksByCategory() {
+        final StopWatch sw = new StopWatch("Execution time");
+        sw.start();
         final String category = "рассказ";
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/filterByCategory?category={category}", String.class, category);
         assertNotNull(response.getBody());
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+        sw.stop();
+        System.out.println("Execution time: "+ sw.getTotalTimeMillis() + " millis");
+    }
+
+
+    @Test
+    void getBooksByCategoryGroupStreamApi() {
+        final StopWatch sw = new StopWatch("Execution time");
+        sw.start();
+        final String category = "рассказ";
+        ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/filterByCategoryStreamApi?category={category}", String.class, category);
+        assertNotNull(response.getBody());
+        System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+        sw.stop();
+        System.out.println("Execution time: "+ sw.getTotalTimeMillis() + " millis");
     }
 
     @Test
     void getBooksByUser() {
-        final String user = "Алексей Лыткин";
+        final StopWatch sw = new StopWatch("Execution time");
+        sw.start();
+        final String user = "Агата Владимировa";
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/orderedBooksByUser?user={user}", String.class, user);
         assertNotNull(response.getBody());
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+        sw.stop();
+        System.out.println("Execution time: "+ sw.getTotalTimeMillis() + " millis");
     }
 
     @Test
     void getUserBooks() {
-        final String user = "Алексей Лыткин";
+        final StopWatch sw = new StopWatch("Execution time");
+        sw.start();
+        final String user = "Агата Владимировa";
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/user/usersBooks?userName={user}", String.class, user);
         assertNotNull(response.getBody());
         System.out.println("\n" + gson.toJson(JsonParser.parseString(response.getBody())));
+        sw.stop();
+        System.out.println("Execution time: "+ sw.getTotalTimeMillis() + " millis");
     }
 
     @Test

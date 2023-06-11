@@ -56,7 +56,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void testGetQueryTypeById() {
-        long id = 10106;
+        long id = 100090;
         ResponseEntity<String> userResponse = restTemplate.getForEntity(getRootUrl() + "/api/v1/user/" + id, String.class);
         assertNotNull(userResponse);
         if (userResponse.getBody() != null) {
@@ -74,7 +74,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void testUpdateUser() {
-        int id = 10127;
+        int id = 100027;
         UserDTO user = restTemplate.getForObject(getRootUrl() + "/api/v1/user/" + id, UserDTO.class);
         user.setName("Иван Иванов");
 
@@ -101,38 +101,32 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void testFilterByName() {
-
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
-        Map<String, String> params = Collections.singletonMap("name", "Альвиан Гурьев");
+        Map<String, String> params = Collections.singletonMap("name", "Олег Попов");
 
         ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/api/v1/user/filterByName?name={name}",
                 HttpMethod.GET, entity, String.class, params);
 
         assertNotNull(response.getBody());
-
         log.info(gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
     @Test
     public void testFilterByNameKeyword() {
-
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
         Map<String, String> params = Collections.singletonMap("name", "Иван");
 
         ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/api/v1/user/filterByNameKeyword?name={name}",
                 HttpMethod.GET, entity, String.class, params);
 
         assertNotNull(response.getBody());
-
         log.info(gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
     @Test
-    public void testFilterByDepartment() throws JsonProcessingException {
+    public void testFilterByDepartment() {
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(null, headers);

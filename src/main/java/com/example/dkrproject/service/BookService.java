@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -117,5 +118,11 @@ public class BookService {
     public List<BookDTO> getBooksByUser(String user) {
         List<Book> list = bookRepository.findByUser(user);
         return list.stream().map(bookTransformer::transformBookToResp).toList();
+    }
+
+    public List<BookDTO> getBooksByCategoryStreamApi(String category) {
+
+        List<BookDTO> bookDTOs = findAllBooks();
+        return bookDTOs.stream().filter(b -> category.equalsIgnoreCase(b.getCategory())).collect(Collectors.toList());
     }
 }
