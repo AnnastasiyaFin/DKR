@@ -184,34 +184,40 @@ class DkrProjectApplicationTests {
         OrderDTO newOrder = createNewOrder();
         //данные о бронируемой книге
         ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/{id}", String.class, newOrder.getBookId());
-        log.info(gson.toJson(JsonParser.parseString(response.getBody())));
+        System.out.println("Бронируемая книга");
+        System.out.println(gson.toJson(JsonParser.parseString(response.getBody())));
 
         //офорляем бронь книги
         OrderDTO orderCreated = restTemplate.postForObject(getRootUrl() + "/api/v1/order", newOrder, OrderDTO.class);
         assertNotNull(orderCreated);
-        log.info(gson.toJson(orderCreated));
+        System.out.println("Бронь книги");
+        System.out.println(gson.toJson(orderCreated));
 
         //данные о бронируемой книге,  количество уменьшилось на 1
         response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/{id}", String.class, newOrder.getBookId());
-        log.info(gson.toJson(JsonParser.parseString(response.getBody())));
+        System.out.println("Количество книг, из которых бронировали, уменьшилось на 1");
+        System.out.println(gson.toJson(JsonParser.parseString(response.getBody())));
 
         Map<String, String> params = new HashMap<>();
         params.put("id", orderCreated.getId().toString());
-        params.put("date", "2023-08-08");
+        params.put("date", "2023-10-01");
 
         restTemplate.put(getRootUrl() + "/api/v1/order/extend?id={id}&date={date}", OrderDTO.class, params);
         ResponseEntity<OrderDTO> userDTOExtened = restTemplate.getForEntity(getRootUrl() + "/api/v1/order/{id}", OrderDTO.class, orderCreated.getId());
         assertNotNull(userDTOExtened);
-        log.info(gson.toJson(userDTOExtened.getBody()));
+        System.out.println("Продление бронирования книги, дата изменилась");
+        System.out.println(gson.toJson(userDTOExtened.getBody()));
 
         restTemplate.put(getRootUrl() + "/api/v1/order/cancel/{id}", OrderDTO.class, params);
         ResponseEntity<OrderDTO> userDTOCanceled = restTemplate.getForEntity(getRootUrl() + "/api/v1/order/{id}", OrderDTO.class, orderCreated.getId());
         assertNotNull(userDTOCanceled);
-        log.info(gson.toJson(userDTOCanceled.getBody()));
+        System.out.println("Возврат книги, проставление признака возврата книги в объекте Order");
+        System.out.println(gson.toJson(userDTOCanceled.getBody()));
 
         //книгу вернули, данные о бронируемой книге, количество должно увеличиться на 1
         response = restTemplate.getForEntity(getRootUrl() + "/api/v1/book/{id}", String.class, newOrder.getBookId());
-        log.info(gson.toJson(JsonParser.parseString(response.getBody())));
+        System.out.println("Количество книг, из которых бронировали, увеличилось на 1");
+        System.out.println(gson.toJson(JsonParser.parseString(response.getBody())));
     }
 
     private OrderDTO createNewOrder() throws ResourceNotFoundException {
