@@ -1,6 +1,7 @@
 package com.example.dkrproject.repository;
 
 import com.example.dkrproject.model.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +14,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Cacheable("user")
     List<User> findByName(String name);
 
     //Select * from User where name LIKE "%tr%"
+    @Cacheable("user_containing")
     List<User> findByNameContaining(String keyword);
 
     //select * from User where name=? AND location=?
@@ -26,6 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select u.* FROM Users u INNER JOIN Department d ON d.id = u.department_id WHERE d.name = :dep",
             nativeQuery = true)
+    @Cacheable("user_department")
     List<User> getUsersByDepartment(String dep);
 
     @Transactional

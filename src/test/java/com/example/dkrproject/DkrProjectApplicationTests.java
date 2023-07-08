@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -57,6 +58,8 @@ class DkrProjectApplicationTests {
     UserController userController;
     @Autowired
     UserTransformer userTransformer;
+    @Autowired
+    CacheManager cacheManager;
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -72,6 +75,7 @@ class DkrProjectApplicationTests {
         Assertions.assertNotNull(userRepository);
         Assertions.assertNotNull(userController);
         Assertions.assertNotNull(userTransformer);
+        Assertions.assertNotNull(cacheManager);
     }
 
     @Autowired

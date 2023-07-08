@@ -6,9 +6,11 @@ import com.example.dkrproject.service.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/book")
 @Tag(name = "Книги", description = "Получение данных о книгах")
+@Validated
 public class BookController {
 
     @Autowired
@@ -40,14 +43,14 @@ public class BookController {
 
     @PutMapping("/add")
     public ResponseEntity<BookDTO> addBookAmount(@RequestParam long id,
-                                                      @RequestParam @Min(1) int amount) throws ResourceNotFoundException {
+                                                 @Min(1) @RequestParam int amount) throws ResourceNotFoundException {
         BookDTO bookUpdated = bookService.updateAmount(id, "add", amount);
         return ResponseEntity.ok().body(bookUpdated);
     }
 
     @PutMapping("/remove")
     public ResponseEntity<BookDTO> removeBookAmount(@RequestParam long id,
-                                                         @RequestParam @Min(1) int amount) throws ResourceNotFoundException {
+                                                    @RequestParam @Min(1) int amount) throws ResourceNotFoundException {
         BookDTO bookUpdated = bookService.updateAmount(id, "remove", amount);
         return ResponseEntity.ok().body(bookUpdated);
     }
@@ -59,26 +62,26 @@ public class BookController {
     }
 
     @GetMapping("/filterByAuthor")
-    public ResponseEntity<List<BookDTO>> getBooksByAuthor(@RequestParam String author) {
+    public ResponseEntity<List<BookDTO>> getBooksByAuthor(@NotBlank @RequestParam String author) {
         List<BookDTO> books = bookService.getBooksByAuthor(author);
         return ResponseEntity.ok().body(books);
     }
 
     @GetMapping("/filterByCategory")
-    public ResponseEntity<List<BookDTO>> getBooksByCategory(@RequestParam String category) {
+    public ResponseEntity<List<BookDTO>> getBooksByCategory(@NotBlank @RequestParam String category) {
         List<BookDTO> books = bookService.getBooksByCategory(category);
         return ResponseEntity.ok().body(books);
     }
 
 
     @GetMapping("/filterByCategoryStreamApi")
-    public ResponseEntity<List<BookDTO>> getBooksByCategoryStreamApi(@RequestParam String category) {
+    public ResponseEntity<List<BookDTO>> getBooksByCategoryStreamApi(@NotBlank @RequestParam String category) {
         List<BookDTO> books = bookService.getBooksByCategoryStreamApi(category);
         return ResponseEntity.ok().body(books);
     }
 
     @GetMapping("/orderedBooksByUser")
-    public ResponseEntity<List<BookDTO>> getBooksByUser(@RequestParam String user) {
+    public ResponseEntity<List<BookDTO>> getBooksByUser(@NotBlank @RequestParam String user) {
         List<BookDTO> books = bookService.getBooksByUser(user);
         return ResponseEntity.ok().body(books);
     }
